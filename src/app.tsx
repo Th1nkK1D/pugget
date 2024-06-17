@@ -1,25 +1,24 @@
 import { createSignal } from 'solid-js';
-import viteLogo from '/vite.svg';
+import { useUserData } from './db/local-storage';
 
 function App() {
-	const [count, setCount] = createSignal(0);
+	const { setUserName } = useUserData();
+	const [name, setName] = createSignal('');
 
 	return (
-		<main class="flex h-dvh flex-col items-center justify-center gap-6">
-			<div>
-				<img src={viteLogo} class="logo" alt="Vite logo" />
-			</div>
-			<h1>Vite + Solid</h1>
-			<button
-				class="btn btn-primary"
-				onClick={() => setCount((count) => count + 1)}
-			>
-				count is {count()}
+		<div class="flex h-dvh flex-col items-center justify-center gap-12">
+			<h1 class="text-2xl font-bold">🐶 Welcome to Pugget!</h1>
+			<input
+				type="text"
+				placeholder="What is you name?"
+				class="input input-bordered w-full max-w-xs"
+				onInput={(e) => setName(e.target.value)}
+			/>
+
+			<button class="btn btn-primary" onClick={() => setUserName(name())}>
+				Continue
 			</button>
-			<p>
-				Edit <code>src/App.tsx</code> and save to test HMR
-			</p>
-		</main>
+		</div>
 	);
 }
 

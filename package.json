@@ -10,7 +10,8 @@
 		"format": "prettier --write --ignore-unknown ."
 	},
 	"dependencies": {
-		"solid-js": "^1.8.15"
+		"solid-js": "^1.8.15",
+		"solidjs-use": "^2.3.0"
 	},
 	"devDependencies": {
 		"@trivago/prettier-plugin-sort-imports": "^4.3.0",
