@@ -12,7 +12,6 @@ export function useUserData() {
 	});
 
 	createEffect(() => {
-		console.log(isSetupPath(), user().name);
 		if (!isSetupPath() && !user().name) {
 			navigate('/setup', { replace: true });
 		}
