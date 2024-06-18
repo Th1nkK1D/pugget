@@ -1,6 +1,5 @@
 import { useObservable } from '@solidjs-use/rxjs';
 import { For, createSignal } from 'solid-js';
-import { ulid } from 'ulid';
 import { db } from '../database';
 import { useUserData } from '../hooks/user-data';
 
@@ -10,10 +9,7 @@ function IndexPage() {
 	const [teamName, setTeamName] = createSignal('');
 
 	function createTeam() {
-		db.teams.insert({
-			id: ulid(),
-			name: teamName(),
-		});
+		db.teams.create(teamName());
 	}
 
 	return (
