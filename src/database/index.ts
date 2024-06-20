@@ -1,8 +1,11 @@
 import { createRxDatabase } from 'rxdb';
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
 import { teams, type TeamCollection } from './team';
-import type { TeamMemberCollection } from './team-member';
-import type { TeamTransactionCollection } from './team-transaction';
+import { teamMembers, type TeamMemberCollection } from './team-member';
+import {
+	teamTransactions,
+	type TeamTransactionCollection,
+} from './team-transaction';
 
 type DatabaseCollections = {
 	teams: TeamCollection;
@@ -17,3 +20,16 @@ export const db = await createRxDatabase<DatabaseCollections>({
 await db.addCollections({
 	teams,
 });
+
+const availableTeams = await db.teams.find().exec();
+
+await db.addCollections(
+	availableTeams.reduce(
+		(cols, { id }) => ({
+			...cols,
+			[`team_${id}_members`]: teamMembers,
+			[`team_${id}_transactions`]: teamTransactions,
+		}),
+		{},
+	),
+);

@@ -30,12 +30,15 @@ export default function () {
 					each={teams()}
 					fallback={<p class="text-sm">You don't have a team yet</p>}
 				>
-					{({ name }) => (
-						<div class="card bg-accent text-base-100 shadow-lg">
+					{(team) => (
+						<a
+							href={`/teams/${team.id}`}
+							class="card bg-accent text-base-100 shadow-lg"
+						>
 							<div class="card-body">
-								<h2 class="font-bold">{name}</h2>
+								<h2 class="font-bold">{team.name}</h2>
 							</div>
-						</div>
+						</a>
 					)}
 				</For>
 			</div>

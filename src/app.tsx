@@ -12,6 +12,10 @@ render(
 				path="/teams"
 				component={lazy(() => import('./routes/teams/index'))}
 			/>
+			<Route
+				path="/teams/:id"
+				component={lazy(() => import('./routes/teams/[id]'))}
+			/>
 		</Router>
 	),
 	document.getElementById('root')!,
