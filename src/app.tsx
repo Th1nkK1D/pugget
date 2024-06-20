@@ -7,8 +7,11 @@ import './index.css';
 render(
 	() => (
 		<Router>
-			<Route path="/" component={lazy(() => import('./routes/index'))} />
-			<Route path="/setup" component={lazy(() => import('./routes/setup'))} />
+			<Route path="/" component={lazy(() => import('./routes'))} />
+			<Route
+				path="/teams"
+				component={lazy(() => import('./routes/teams/index'))}
+			/>
 		</Router>
 	),
 	document.getElementById('root')!,

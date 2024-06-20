@@ -4,7 +4,7 @@ import { useStorage } from 'solidjs-use';
 
 export function useUserData() {
 	const navigate = useNavigate();
-	const isSetupPath = useMatch(() => '/setup');
+	const isSetupPath = useMatch(() => '/');
 
 	const [user, setUser] = useStorage('user', {
 		id: crypto.randomUUID(),
@@ -13,11 +13,11 @@ export function useUserData() {
 
 	createEffect(() => {
 		if (!isSetupPath() && !user().name) {
-			navigate('/setup', { replace: true });
+			navigate('/', { replace: true });
 		}
 
 		if (isSetupPath() && user().name) {
-			navigate('/', { replace: true });
+			navigate('/teams', { replace: true });
 		}
 	});
 
