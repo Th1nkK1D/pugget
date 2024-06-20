@@ -24,8 +24,8 @@ const schema = {
 } as const;
 
 const statics = {
-	create(this: RxCollection, name: string) {
-		this.insert({
+	create(this: RxCollection<Team>, name: string) {
+		return this.insert({
 			id: ulid(),
 			name,
 		});

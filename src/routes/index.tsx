@@ -1,15 +1,24 @@
 import { useObservable } from '@solidjs-use/rxjs';
 import { For, createSignal } from 'solid-js';
 import { db } from '../database';
+import { teamMembers } from '../database/team-member';
+import { teamTransactions } from '../database/team-transaction';
 import { useUserData } from '../hooks/user-data';
 
 function IndexPage() {
 	const { user } = useUserData();
-	const [teams] = useObservable(db.teams.find().$);
+	const [teams] = useObservable(db.teams.find({ sort: [{ id: 'desc' }] }).$);
 	const [teamName, setTeamName] = createSignal('');
 
-	function createTeam() {
-		db.teams.create(teamName());
+	async function createTeam() {
+		const { id } = await db.teams.create(teamName());
+
+		await db.addCollections({
+			[`team_${id}_members`]: teamMembers,
+			[`team_${id}_transactions`]: teamTransactions,
+		});
+
+		await db[`team_${id}_members`].join(user().id, user().name);
 	}
 
 	return (
@@ -18,7 +27,7 @@ function IndexPage() {
 			<h1 class="text-xl font-bold">My Teams</h1>
 			<div class="flex flex-col gap-2">
 				<For
-					each={teams()?.reverse()}
+					each={teams()}
 					fallback={<p class="text-sm">You don't have a team yet</p>}
 				>
 					{({ name }) => (
