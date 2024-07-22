@@ -1,25 +1,13 @@
-import { useObservable } from '@solidjs-use/rxjs';
 import { For, createSignal } from 'solid-js';
-import { db } from '../../database';
-import { teamMembers } from '../../database/team-member';
-import { teamTransactions } from '../../database/team-transaction';
+import { ulid } from 'ulid';
+import { addTeam, db } from '../../database';
+import { useSafeObservable } from '../../hooks/observable';
 import { useUserData } from '../../hooks/user-data';
 
 export default function () {
 	const { user } = useUserData();
-	const [teams] = useObservable(db.teams.find({ sort: [{ id: 'desc' }] }).$);
+	const teams = useSafeObservable(db.teams.find({ sort: [{ id: 'desc' }] }).$);
 	const [teamName, setTeamName] = createSignal('');
-
-	async function createTeam() {
-		const { id } = await db.teams.create(teamName());
-
-		await db.addCollections({
-			[`team_${id}_members`]: teamMembers,
-			[`team_${id}_transactions`]: teamTransactions,
-		});
-
-		await db[`team_${id}_members`].join(user().id, user().name);
-	}
 
 	return (
 		<div class="flex h-dvh flex-col gap-6 p-3">
@@ -49,7 +37,10 @@ export default function () {
 					class="input input-bordered w-full"
 					onInput={(e) => setTeamName(e.target.value)}
 				/>
-				<button class="btn btn-primary" onClick={createTeam}>
+				<button
+					class="btn btn-primary"
+					onClick={() => addTeam(ulid(), teamName(), user())}
+				>
 					Create team
 				</button>
 			</div>

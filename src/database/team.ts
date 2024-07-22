@@ -3,7 +3,6 @@ import {
 	type RxCollection,
 	type RxCollectionCreator,
 } from 'rxdb';
-import { ulid } from 'ulid';
 
 const schema = {
 	title: 'Team schema',
@@ -23,19 +22,9 @@ const schema = {
 	required: ['id', 'name'],
 } as const;
 
-const statics = {
-	create(this: RxCollection<Team>, name: string) {
-		return this.insert({
-			id: ulid(),
-			name,
-		});
-	},
-};
-
 export const teams: RxCollectionCreator = {
 	schema,
-	statics,
 };
 
 export type Team = ExtractDocumentTypeFromTypedRxJsonSchema<typeof schema>;
-export type TeamCollection = RxCollection<Team, {}, typeof statics>;
+export type TeamCollection = RxCollection<Team, {}, {}>;

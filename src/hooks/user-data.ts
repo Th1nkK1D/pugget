@@ -26,3 +26,5 @@ export function useUserData() {
 		setUserName: (name: string) => setUser({ ...user(), name }),
 	};
 }
+
+export type User = ReturnType<ReturnType<typeof useUserData>['user']>;
