@@ -11,21 +11,25 @@ export default function () {
 	const navigate = useNavigate();
 
 	const team = useSafeObservable(db.teams.findOne({ selector: { id } }).$);
-
-	createEffect(() => {
-		if (team() === null) {
-			if (!searchParams.name) {
-				navigate('/teams');
-			} else {
-				addTeam(id, searchParams.name, user());
-			}
-		}
-	});
-
 	const members = useSafeObservable(db[`team_${id}_members`]?.find().$);
 	const transactions = useSafeObservable(
 		db[`team_${id}_transactions`]?.find().$,
 	);
+
+	createEffect(() => {
+		if (team() === null) {
+			if (!searchParams.invite) {
+				navigate('/teams');
+			} else {
+				addTeam(id, decodeURI(searchParams.invite), user());
+			}
+		}
+	});
+
+	function copyInvitationLink() {
+		const inviteUrl = `${location.origin}${location.pathname}?invite=${encodeURI(team()?.name || '')}`;
+		navigator.clipboard.writeText(inviteUrl);
+	}
 
 	return (
 		<div class="flex flex-col gap-3 p-3">
@@ -36,6 +40,9 @@ export default function () {
 				<ul class="list-inside list-disc">
 					<For each={members()}>{({ name }) => <li>{name}</li>}</For>
 				</ul>
+				<button class="btn btn-outline" onClick={copyInvitationLink}>
+					Copy invitation link
+				</button>
 			</div>
 
 			<div>
