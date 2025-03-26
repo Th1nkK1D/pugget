@@ -11,7 +11,6 @@
 			.findOne()
 			.exec()
 			.then((user) => {
-				console.log(user);
 				if (!user) {
 					goto('/', { replaceState: true });
 				}
