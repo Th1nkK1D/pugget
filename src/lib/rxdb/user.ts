@@ -11,12 +11,19 @@ export const userSchema = {
 			type: 'string',
 			maxLength: 36
 		},
+		hash: {
+			type: 'string',
+			maxLength: 40
+		},
 		name: {
 			type: 'string',
-			maxLength: 12
+			maxLength: 16
+		},
+		createdAt: {
+			type: 'number'
 		}
 	},
-	required: ['id', 'name']
+	required: ['id', 'hash', 'name']
 } as const;
 
 export type User = ExtractDocumentTypeFromTypedRxJsonSchema<typeof userSchema>;
