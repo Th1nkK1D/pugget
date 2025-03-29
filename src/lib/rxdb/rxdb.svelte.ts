@@ -8,7 +8,7 @@ import {
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie';
 import { wrappedValidateAjvStorage } from 'rxdb/plugins/validate-ajv';
 import { userSchema, type User, type UserCollection } from './user';
-import { onMount } from 'svelte';
+import { onDestroy, onMount } from 'svelte';
 import { userGroupSchema, type UserGroup, type UserGroupCollection } from './user-group';
 import { getConnectionHandlerSimplePeer, replicateWebRTC } from 'rxdb/plugins/replication-webrtc';
 
@@ -45,6 +45,12 @@ export function useRxdb() {
 				addCollection<UserGroup>(`user-${user.hash}-groups`, { schema: userGroupSchema }, true);
 			})
 		);
+	});
+
+	onDestroy(() => {
+		if (collections) {
+			Object.values(collections).forEach((collection) => collection.close());
+		}
 	});
 
 	async function addCollection<T>(
