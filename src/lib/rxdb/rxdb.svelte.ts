@@ -86,6 +86,9 @@ export function useRxdb() {
 	return {
 		get collections() {
 			return collections;
+		},
+		get currentUser() {
+			return collections?.users.findOne({ selector: { isActive: true } }).$;
 		}
 	};
 }

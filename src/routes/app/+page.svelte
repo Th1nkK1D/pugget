@@ -4,9 +4,9 @@
 	import { ChevronRightIcon, CirclePlusIcon } from '@lucide/svelte';
 
 	const rxdb = useRxdb();
-	const user = $derived(rxdb.collections?.users.findOne().$);
+	const user = $derived(rxdb.currentUser);
 	const groups = $derived(
-		$user ? rxdb.collections?.[`user-${$user!.hash}-groups`]?.find().$ : undefined
+		$user ? rxdb.collections?.[`user-${$user.hash}-groups`]?.find().$ : undefined
 	);
 
 	let groupName = $state('');
@@ -29,7 +29,7 @@
 {#if $groups?.length}
 	<ul class="list bg-base-100 flex-1">
 		{#each $groups as { name, joinedAt }}
-			<li class="list-row">
+			<li class="list-row items-center">
 				<div class="list-col-grow">
 					<div class="text-2xl font-bold">{name}</div>
 					<div class="text-xs opacity-70">

@@ -7,14 +7,11 @@
 	let rxdb = useRxdb();
 
 	$effect(() => {
-		rxdb.collections?.users
-			.findOne()
-			.exec()
-			.then((user) => {
-				if (!user) {
-					goto('/', { replaceState: true });
-				}
-			});
+		rxdb.currentUser?.subscribe((user) => {
+			if (!user) {
+				goto('/', { replaceState: true });
+			}
+		});
 	});
 </script>
 

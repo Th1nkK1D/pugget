@@ -9,7 +9,7 @@
 	let rxdb = useRxdb();
 
 	$effect(() => {
-		rxdb.collections?.users.findOne().$.subscribe((user) => {
+		rxdb.currentUser?.subscribe((user) => {
 			if (user) {
 				goto('/app', { replaceState: true });
 			}
@@ -25,6 +25,7 @@
 			id,
 			hash: await hashString(id),
 			name,
+			isActive: true,
 			createdAt: new Date().getTime()
 		});
 	}

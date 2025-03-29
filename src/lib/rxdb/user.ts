@@ -19,11 +19,14 @@ export const userSchema = {
 			type: 'string',
 			maxLength: 16
 		},
+		isActive: {
+			type: 'boolean'
+		},
 		createdAt: {
 			type: 'number'
 		}
 	},
-	required: ['id', 'hash', 'name']
+	required: ['id', 'hash', 'isActive', 'name']
 } as const;
 
 export type User = ExtractDocumentTypeFromTypedRxJsonSchema<typeof userSchema>;
