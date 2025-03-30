@@ -28,14 +28,14 @@
 
 {#if $groups?.length}
 	<ul class="list bg-base-100 flex-1">
-		{#each $groups as { name, joinedAt }}
+		{#each $groups as { id, name, joinedAt }}
 			<li class="list-row items-center">
-				<div class="list-col-grow">
+				<a href="/app/group?id={id}" class="list-col-grow">
 					<div class="text-2xl font-bold">{name}</div>
 					<div class="text-xs opacity-70">
 						Joined at {new Date(joinedAt).toLocaleDateString()}
 					</div>
-				</div>
+				</a>
 				<ChevronRightIcon />
 			</li>
 		{/each}

@@ -11,10 +11,12 @@ import { userSchema, type User, type UserCollection } from './user';
 import { onDestroy, onMount } from 'svelte';
 import { userGroupSchema, type UserGroup, type UserGroupCollection } from './user-group';
 import { getConnectionHandlerSimplePeer, replicateWebRTC } from 'rxdb/plugins/replication-webrtc';
+import type { GroupMemberCollection } from './group-member';
 
 type Collection = {
 	users: UserCollection;
-} & Record<`user-${string}-groups`, UserGroupCollection>;
+} & Record<`user-${string}-groups`, UserGroupCollection> &
+	Record<`group-${string}-members`, GroupMemberCollection>;
 
 export function useRxdb() {
 	let db: RxDatabase<Collection>;
@@ -89,6 +91,7 @@ export function useRxdb() {
 		},
 		get currentUser() {
 			return collections?.users.findOne({ selector: { isActive: true } }).$;
-		}
+		},
+		addCollection
 	};
 }
