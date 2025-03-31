@@ -1,19 +1,20 @@
 import { type ExtractDocumentTypeFromTypedRxJsonSchema, type RxCollection } from 'rxdb';
+import { userSchema } from './user';
 
 export const groupMemberSchema = {
-	title: 'User Group',
-	description: 'Groups that a user belong to',
+	title: 'Group Member',
+	description: 'Users that belong to a group',
 	version: 0,
 	primaryKey: 'userHash',
 	type: 'object',
 	properties: {
 		userHash: {
 			type: 'string',
-			maxLength: 40
+			maxLength: userSchema.properties.hash.maxLength
 		},
 		name: {
 			type: 'string',
-			maxLength: 16
+			maxLength: userSchema.properties.name.maxLength
 		},
 		joinedAt: {
 			type: 'number'
