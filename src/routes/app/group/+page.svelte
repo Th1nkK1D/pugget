@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { groupMemberSchema, type GroupMember } from '$lib/rxdb/group-member';
+	import { groupTransactionSchema } from '$lib/rxdb/group-transaction';
 	import { useRxdb } from '$lib/rxdb/rxdb.svelte';
+	import { ReceiptTextIcon, UserIcon } from '@lucide/svelte';
 
 	const rxdb = useRxdb();
 	const user = $derived(rxdb.currentUser);
@@ -13,14 +15,15 @@
 			: undefined
 	);
 	const members = $derived(rxdb.collections?.[`group-${$group?.id}-members`]?.find().$);
+	const transactions = $derived(rxdb.collections?.[`group-${$group?.id}-transactions`]?.find().$);
 
 	$effect(() => {
-		if (!rxdb.collections || !$user) {
-			return;
-		}
-
 		if ($group === null) {
 			goto('/app', { replaceState: true });
+		}
+
+		if (!rxdb.collections || !$user || !$group) {
+			return;
 		}
 
 		rxdb
@@ -36,8 +39,31 @@
 					joinedAt: new Date().getTime()
 				});
 			});
+
+		rxdb.addCollection(
+			`group-${$group?.id}-transactions`,
+			{ schema: groupTransactionSchema },
+			true
+		);
 	});
 </script>
 
-<h1 class="text-2xl font-bold">{$group?.name}</h1>
-<p>{$members?.length} members</p>
+<h1 class="text-3xl font-bold">{$group?.name}</h1>
+
+<div class="stats">
+	<div class="stat">
+		<div class="stat-figure">
+			<UserIcon />
+		</div>
+		<div class="stat-value">{$members?.length}</div>
+		<div class="stat-desc">members</div>
+	</div>
+
+	<div class="stat">
+		<div class="stat-figure">
+			<ReceiptTextIcon />
+		</div>
+		<div class="stat-value">{$transactions?.length}</div>
+		<div class="stat-desc">transactions</div>
+	</div>
+</div>

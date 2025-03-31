@@ -12,11 +12,13 @@ import { onDestroy, onMount } from 'svelte';
 import { userGroupSchema, type UserGroup, type UserGroupCollection } from './user-group';
 import { getConnectionHandlerSimplePeer, replicateWebRTC } from 'rxdb/plugins/replication-webrtc';
 import type { GroupMemberCollection } from './group-member';
+import type { GroupTransactionCollection } from './group-transaction';
 
 type Collection = {
 	users: UserCollection;
 } & Record<`user-${string}-groups`, UserGroupCollection> &
-	Record<`group-${string}-members`, GroupMemberCollection>;
+	Record<`group-${string}-members`, GroupMemberCollection> &
+	Record<`group-${string}-transactions`, GroupTransactionCollection>;
 
 export function useRxdb() {
 	let db: RxDatabase<Collection>;
